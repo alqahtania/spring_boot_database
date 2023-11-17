@@ -1,6 +1,6 @@
 package com.abdull.database.repositories;
 
-import com.abdull.database.domain.Author;
+import com.abdull.database.entity.Author;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

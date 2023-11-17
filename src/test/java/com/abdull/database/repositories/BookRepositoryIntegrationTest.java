@@ -1,8 +1,8 @@
 package com.abdull.database.repositories;
 
 import com.abdull.database.TestDataUtil;
-import com.abdull.database.domain.Author;
-import com.abdull.database.domain.Book;
+import com.abdull.database.entity.Author;
+import com.abdull.database.entity.Book;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.abdull.database.domain;
+package com.abdull.database.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

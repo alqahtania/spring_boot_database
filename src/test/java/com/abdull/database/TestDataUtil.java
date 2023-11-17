@@ -1,7 +1,7 @@
 package com.abdull.database;
 
-import com.abdull.database.domain.Author;
-import com.abdull.database.domain.Book;
+import com.abdull.database.entity.Author;
+import com.abdull.database.entity.Book;
 
 import java.util.Arrays;
 import java.util.List;

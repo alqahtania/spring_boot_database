@@ -1,6 +1,6 @@
 package com.abdull.database.repositories;
 
-import com.abdull.database.domain.Book;
+import com.abdull.database.entity.Book;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
