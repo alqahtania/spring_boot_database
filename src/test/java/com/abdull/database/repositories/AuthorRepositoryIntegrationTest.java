@@ -1,7 +1,7 @@
 package com.abdull.database.repositories;
 
 import com.abdull.database.TestDataUtil;
-import com.abdull.database.entity.Author;
+import com.abdull.database.entity.AuthorEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +32,9 @@ class AuthorRepositoryIntegrationTest {
 
     @Test
     public void testThatAuthorCanBeCreatedAndRecalled() {
-        Author author = TestDataUtil.createTestAuthorA();
+        AuthorEntity author = TestDataUtil.createTestAuthorA();
         authorRepository.save(author);
-        Optional<Author> result = authorRepository.findById(author.getId());
+        Optional<AuthorEntity> result = authorRepository.findById(author.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(author);
 
@@ -42,13 +42,13 @@ class AuthorRepositoryIntegrationTest {
 
     @Test
     public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
-        Author authorA = TestDataUtil.createTestAuthorA();
+        AuthorEntity authorA = TestDataUtil.createTestAuthorA();
         authorRepository.save(authorA);
-        Author authorB = TestDataUtil.createTestAuthorB();
+        AuthorEntity authorB = TestDataUtil.createTestAuthorB();
         authorRepository.save(authorB);
-        Author authorC = TestDataUtil.createTestAuthorC();
+        AuthorEntity authorC = TestDataUtil.createTestAuthorC();
         authorRepository.save(authorC);
-        List<Author> result = convertIterableToList(authorRepository.findAll());
+        List<AuthorEntity> result = convertIterableToList(authorRepository.findAll());
         assertThat(result)
                 .hasSize(3)
                 .containsExactly(authorA, authorB, authorC);
@@ -56,11 +56,11 @@ class AuthorRepositoryIntegrationTest {
 
     @Test
     public void testThatAuthorCanBeUpdated() {
-        Author authorA = TestDataUtil.createTestAuthorA();
+        AuthorEntity authorA = TestDataUtil.createTestAuthorA();
         authorRepository.save(authorA);
         authorA.setName("Abdull");
         authorRepository.save(authorA);
-        Optional<Author> result = authorRepository.findById(authorA.getId());
+        Optional<AuthorEntity> result = authorRepository.findById(authorA.getId());
         assertThat(result).isPresent();
         assertThat(result.get().getName()).isEqualTo("Abdull");
         assertThat(result.get()).isEqualTo(authorA);
@@ -68,34 +68,34 @@ class AuthorRepositoryIntegrationTest {
 
     @Test
     public void testThatAuthorCanBeDeleted() {
-        Author authorA = TestDataUtil.createTestAuthorA();
+        AuthorEntity authorA = TestDataUtil.createTestAuthorA();
         authorRepository.save(authorA);
-        Optional<Author> saveResult = authorRepository.findById(authorA.getId());
+        Optional<AuthorEntity> saveResult = authorRepository.findById(authorA.getId());
         assertThat(saveResult).isPresent();
         assertThat(saveResult.get()).isEqualTo(authorA);
         authorRepository.delete(authorA);
-        Optional<Author> deleteResult = authorRepository.findById(authorA.getId());
+        Optional<AuthorEntity> deleteResult = authorRepository.findById(authorA.getId());
         assertThat(deleteResult).isNotPresent();
     }
 
     @Test
     public void testThatGetAuthorsWithAgeLessThan() {
-        Author testAuthorA = TestDataUtil.createTestAuthorA();
-        Author testAuthorB = TestDataUtil.createTestAuthorB();
-        Author testAuthorC = TestDataUtil.createTestAuthorC();
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        AuthorEntity testAuthorB = TestDataUtil.createTestAuthorB();
+        AuthorEntity testAuthorC = TestDataUtil.createTestAuthorC();
         authorRepository.saveAll(createListOfAuthors(testAuthorA, testAuthorB, testAuthorC));
-        List<Author> authors = convertIterableToList(authorRepository.ageLessThan(50));
+        List<AuthorEntity> authors = convertIterableToList(authorRepository.ageLessThan(50));
         assertThat(authors).containsExactly(testAuthorB, testAuthorC);
 
     }
 
     @Test
     public void testThatGetAuthorsWithAgeGreaterThan() {
-        Author testAuthorA = TestDataUtil.createTestAuthorA();
-        Author testAuthorB = TestDataUtil.createTestAuthorB();
-        Author testAuthorC = TestDataUtil.createTestAuthorC();
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        AuthorEntity testAuthorB = TestDataUtil.createTestAuthorB();
+        AuthorEntity testAuthorC = TestDataUtil.createTestAuthorC();
         authorRepository.saveAll(createListOfAuthors(testAuthorA, testAuthorB, testAuthorC));
-        List<Author> authors = convertIterableToList(authorRepository.findAuthorsWithAgeGreaterThan(50));
+        List<AuthorEntity> authors = convertIterableToList(authorRepository.findAuthorsWithAgeGreaterThan(50));
         assertThat(authors).containsExactly(testAuthorA);
     }
 }

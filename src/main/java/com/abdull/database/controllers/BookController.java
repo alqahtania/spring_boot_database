@@ -14,7 +14,7 @@ public class BookController {
     @GetMapping(path = "/books")
     public Book retrieveBook() {
         return Book.builder()
-                .isbn("isb-nnn")
+                .isbn("isb-n")
                 .title("Spring Boot")
                 .author("Abdullah")
                 .yearPublished("2023")

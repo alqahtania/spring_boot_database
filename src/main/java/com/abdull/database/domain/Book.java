@@ -1,5 +1,7 @@
 package com.abdull.database.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +17,9 @@ public class Book {
 
     private String title;
 
+    @JsonIgnore
     private String author;
 
+    @JsonProperty("year")
     private String yearPublished;
 }

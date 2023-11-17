@@ -1,9 +1,9 @@
 package com.abdull.database.repositories;
 
-import com.abdull.database.entity.Book;
+import com.abdull.database.entity.BookEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookRepository extends CrudRepository<Book, String> {
+public interface BookRepository extends CrudRepository<BookEntity, String> {
 }

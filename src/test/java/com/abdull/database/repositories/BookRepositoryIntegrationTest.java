@@ -1,8 +1,8 @@
 package com.abdull.database.repositories;
 
 import com.abdull.database.TestDataUtil;
-import com.abdull.database.entity.Author;
-import com.abdull.database.entity.Book;
+import com.abdull.database.entity.AuthorEntity;
+import com.abdull.database.entity.BookEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +28,22 @@ class BookRepositoryIntegrationTest {
 
     @Test
     public void testThatBookCanBeCreatedAndRecalled() {
-        Author author = TestDataUtil.createTestAuthorA();
-        Book book = TestDataUtil.createTestBookA(author);
+        AuthorEntity author = TestDataUtil.createTestAuthorA();
+        BookEntity book = TestDataUtil.createTestBookA(author);
         bookRepository.save(book);
-        Optional<Book> result = bookRepository.findById(book.getIsbn());
+        Optional<BookEntity> result = bookRepository.findById(book.getIsbn());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(book);
     }
 
     @Test
     public void testThatBookCanBeUpdated() {
-        Author author = TestDataUtil.createTestAuthorA();
-        Book book = TestDataUtil.createTestBookB(author);
+        AuthorEntity author = TestDataUtil.createTestAuthorA();
+        BookEntity book = TestDataUtil.createTestBookB(author);
         bookRepository.save(book);
         book.setTitle("UPDATED");
         bookRepository.save(book);
-        Optional<Book> result = bookRepository.findById(book.getIsbn());
+        Optional<BookEntity> result = bookRepository.findById(book.getIsbn());
         assertThat(result).isPresent();
         assertThat(result.get().getTitle()).isEqualTo("UPDATED");
     }
