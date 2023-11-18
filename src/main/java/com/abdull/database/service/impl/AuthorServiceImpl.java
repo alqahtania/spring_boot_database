@@ -5,6 +5,10 @@ import com.abdull.database.repositories.AuthorRepository;
 import com.abdull.database.service.AuthorService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.abdull.database.util.Utils.convertIterableToList;
+
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
@@ -17,5 +21,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorEntity createAuthor(AuthorEntity authorEntity) {
         return authorRepository.save(authorEntity);
+    }
+
+    @Override
+    public List<AuthorEntity> findAllAuthors() {
+        return convertIterableToList(authorRepository.findAll());
     }
 }

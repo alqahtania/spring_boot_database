@@ -5,6 +5,8 @@ import com.abdull.database.entity.BookEntity;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public final class TestDataUtil {
     private TestDataUtil(){
@@ -59,7 +61,9 @@ public final class TestDataUtil {
     }
 
     public static <S> List<S> convertIterableToList(Iterable<S> iterable) {
-        return (List<S>) iterable;
+        return StreamSupport
+                .stream(iterable.spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public static List<AuthorEntity> createListOfAuthors(AuthorEntity... authors) {
