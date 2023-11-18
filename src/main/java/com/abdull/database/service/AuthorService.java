@@ -8,4 +8,6 @@ public interface AuthorService {
     AuthorEntity createAuthor(AuthorEntity authorEntity);
 
     List<AuthorEntity> findAllAuthors();
+
+    AuthorEntity findAuthor(Long id);
 }

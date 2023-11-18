@@ -7,10 +7,7 @@ import com.abdull.database.service.AuthorService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +35,10 @@ public class AuthorController {
     public ResponseEntity<List<AuthorDto>> listAuthors() {
         List<AuthorEntity> allAuthors = authorService.findAllAuthors();
         return new ResponseEntity<>(authorMapper.mapTo(allAuthors), HttpStatus.OK);
+    }
+    @GetMapping(path = "/authors")
+    public ResponseEntity<AuthorDto> readOneAuthor(@RequestParam("id") Long id) {
+        AuthorEntity author = authorService.findAuthor(id);
+        return new ResponseEntity<>(authorMapper.mapTo(author), HttpStatus.OK);
     }
 }

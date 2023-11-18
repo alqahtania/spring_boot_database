@@ -6,6 +6,7 @@ import com.abdull.database.service.AuthorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.abdull.database.util.Utils.convertIterableToList;
 
@@ -26,5 +27,11 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<AuthorEntity> findAllAuthors() {
         return convertIterableToList(authorRepository.findAll());
+    }
+
+    @Override
+    public AuthorEntity findAuthor(Long id) {
+        Optional<AuthorEntity> authorOptional = authorRepository.findById(id);
+        return authorOptional.orElse(null);
     }
 }

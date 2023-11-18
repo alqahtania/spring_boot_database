@@ -110,4 +110,22 @@ class AuthorControllerIntegrationTest {
                 MockMvcResultMatchers.jsonPath("$[2].age").value(testAuthorC.getAge())
         );
     }
+
+    @Test
+    public void testThatCanRetrieveSingleAuthorAndReturnStatus200() throws Exception {
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        AuthorEntity testAuthorB = TestDataUtil.createTestAuthorB();
+        AuthorEntity testAuthorC = TestDataUtil.createTestAuthorC();
+        authorService.createAuthor(testAuthorA);
+        authorService.createAuthor(testAuthorB);
+        authorService.createAuthor(testAuthorC);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/?id=1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(testAuthorA.getName())
+        );
+    }
 }
