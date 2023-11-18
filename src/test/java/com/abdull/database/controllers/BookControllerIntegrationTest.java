@@ -3,6 +3,7 @@ package com.abdull.database.controllers;
 import com.abdull.database.TestDataUtil;
 import com.abdull.database.entity.AuthorEntity;
 import com.abdull.database.entity.BookEntity;
+import com.abdull.database.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
@@ -27,9 +28,12 @@ public class BookControllerIntegrationTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
+    private BookService bookService;
+
     @Autowired
-    public BookControllerIntegrationTest(MockMvc mockMvc) {
+    public BookControllerIntegrationTest(MockMvc mockMvc, BookService bookService) {
         this.mockMvc = mockMvc;
+        this.bookService = bookService;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -87,5 +91,32 @@ public class BookControllerIntegrationTest {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.author.age").value(80)
         );
+    }
+
+    @Test
+    public void testThatGetBooksReturnStatus200() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatGetBooksReturnListOfAllBooks() throws Exception {
+        BookEntity testBookA = TestDataUtil.createTestBookA(null);
+        BookEntity testBookB = TestDataUtil.createTestBookB(null);
+        bookService.createBook("123456", testBookA);
+        bookService.createBook("23453", testBookB);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].isbn").value("123456")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[1].title").value(testBookB.getTitle())
+        );
+
     }
 }

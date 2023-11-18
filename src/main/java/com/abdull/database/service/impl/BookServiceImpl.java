@@ -5,6 +5,10 @@ import com.abdull.database.repositories.BookRepository;
 import com.abdull.database.service.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.abdull.database.util.Utils.convertIterableToList;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -18,5 +22,10 @@ public class BookServiceImpl implements BookService {
     public BookEntity createBook(String isbn, BookEntity bookEntity) {
         bookEntity.setIsbn(isbn);
         return bookRepository.save(bookEntity);
+    }
+
+    @Override
+    public List<BookEntity> findAllBooks() {
+        return convertIterableToList(bookRepository.findAll());
     }
 }
