@@ -59,4 +59,22 @@ public class AuthorController {
         AuthorEntity savedAuthor = authorService.save(authorMapper.mapFrom(authorDto));
         return new ResponseEntity<>(authorMapper.mapTo(savedAuthor), HttpStatus.OK);
     }
+
+    @PatchMapping("/authors/{id}")
+    public ResponseEntity<AuthorDto> partialUpdateAuthor(
+            @PathVariable Long id,
+            @RequestBody AuthorDto authorDto
+    ) {
+        if(!authorService.isExists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        AuthorEntity authorEntity =  authorService.partialUpdate(id, authorMapper.mapFrom(authorDto));
+        return new ResponseEntity<>(authorMapper.mapTo(authorEntity), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/authors/{id}")
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+        authorService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

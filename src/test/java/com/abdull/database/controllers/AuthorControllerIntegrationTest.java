@@ -3,7 +3,6 @@ package com.abdull.database.controllers;
 import com.abdull.database.TestDataUtil;
 import com.abdull.database.entity.AuthorEntity;
 import com.abdull.database.service.AuthorService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
@@ -184,6 +184,39 @@ class AuthorControllerIntegrationTest {
         );
     }
 
+    @Test
+    public void testThatAuthorCanBePartiallyUpdatedWithPatchMethod() throws Exception {
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        authorService.save(testAuthorA);
+        testAuthorA.setId(234L);
+        testAuthorA.setAge(40);
+        testAuthorA.setName(null);
+        String requestBody = objectMapper.writeValueAsString(testAuthorA);
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(1)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Abigail Rose")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.age").value(40)
+        );
+    }
+
+    @Test
+    public void testThatWeCanDeleteAuthorSuccessfully204status() throws Exception {
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        authorService.save(testAuthorA);
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+        assertThat(authorService.isExists(testAuthorA.getId())).isFalse();
+    }
 
 
 }
