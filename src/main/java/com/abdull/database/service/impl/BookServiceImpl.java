@@ -6,6 +6,7 @@ import com.abdull.database.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.abdull.database.util.Utils.convertIterableToList;
 
@@ -27,5 +28,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookEntity> findAllBooks() {
         return convertIterableToList(bookRepository.findAll());
+    }
+
+    @Override
+    public Optional<BookEntity> findBook(String isbn) {
+        return bookRepository.findById(isbn);
     }
 }

@@ -117,6 +117,35 @@ public class BookControllerIntegrationTest {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[1].title").value(testBookB.getTitle())
         );
+    }
 
+    @Test
+    public void testThatCanRetrieveSingleBookAndReturnStatus200() throws Exception {
+        BookEntity testBookA = TestDataUtil.createTestBookA(null);
+        BookEntity testBookC = TestDataUtil.createTestBookC(null);
+        bookService.createBook("1234-bnmb",testBookA);
+        bookService.createBook("4554--gg", testBookC);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/1234-bnmb")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.title").value(testBookA.getTitle())
+        );
+    }
+
+    @Test
+    public void testThatCanRetrieveSingleBookAndReturnStatus404NotFound() throws Exception {
+        BookEntity testBookA = TestDataUtil.createTestBookA(null);
+        BookEntity testBookC = TestDataUtil.createTestBookC(null);
+        bookService.createBook("1234-bnmb",testBookA);
+        bookService.createBook("4554--gg", testBookC);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
     }
 }

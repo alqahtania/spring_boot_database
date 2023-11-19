@@ -3,6 +3,7 @@ package com.abdull.database.controllers;
 import com.abdull.database.TestDataUtil;
 import com.abdull.database.entity.AuthorEntity;
 import com.abdull.database.service.AuthorService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -96,9 +97,9 @@ class AuthorControllerIntegrationTest {
         AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
         AuthorEntity testAuthorB = TestDataUtil.createTestAuthorB();
         AuthorEntity testAuthorC = TestDataUtil.createTestAuthorC();
-        authorService.createAuthor(testAuthorA);
-        authorService.createAuthor(testAuthorB);
-        authorService.createAuthor(testAuthorC);
+        authorService.save(testAuthorA);
+        authorService.save(testAuthorB);
+        authorService.save(testAuthorC);
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/authors")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -116,11 +117,11 @@ class AuthorControllerIntegrationTest {
         AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
         AuthorEntity testAuthorB = TestDataUtil.createTestAuthorB();
         AuthorEntity testAuthorC = TestDataUtil.createTestAuthorC();
-        authorService.createAuthor(testAuthorA);
-        authorService.createAuthor(testAuthorB);
-        authorService.createAuthor(testAuthorC);
+        authorService.save(testAuthorA);
+        authorService.save(testAuthorB);
+        authorService.save(testAuthorC);
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/authors/?id=1")
+                MockMvcRequestBuilders.get("/authors/1")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
                 MockMvcResultMatchers.status().isOk()
@@ -128,4 +129,61 @@ class AuthorControllerIntegrationTest {
                 MockMvcResultMatchers.jsonPath("$.name").value(testAuthorA.getName())
         );
     }
+
+    @Test
+    public void testThatCanRetrieveSingleAuthorAndReturnStatus404NotFound() throws Exception {
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        AuthorEntity testAuthorB = TestDataUtil.createTestAuthorB();
+        AuthorEntity testAuthorC = TestDataUtil.createTestAuthorC();
+        authorService.save(testAuthorA);
+        authorService.save(testAuthorB);
+        authorService.save(testAuthorC);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatAuthorGetFullyUpdatedAndIdIsNotChangedReturned200() throws Exception {
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        authorService.save(testAuthorA);
+        testAuthorA.setId(234L);
+        testAuthorA.setName("Abdull Bosk");
+        testAuthorA.setAge(33);
+        String requestBody = objectMapper.writeValueAsString(testAuthorA);
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(1)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Abdull Bosk")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.age").value(33)
+        );
+    }
+
+     @Test
+    public void testThatAuthorPutUpdateReturn404NotFound() throws Exception {
+        AuthorEntity testAuthorA = TestDataUtil.createTestAuthorA();
+        authorService.save(testAuthorA);
+        testAuthorA.setId(234L);
+        testAuthorA.setName("Abdull Bosk");
+        testAuthorA.setAge(33);
+        String requestBody = objectMapper.writeValueAsString(testAuthorA);
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/authors/14563")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+
+
 }
